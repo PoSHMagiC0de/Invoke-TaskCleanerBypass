@@ -42,8 +42,9 @@
         if(!(gwmi -class win32_groupuser | Where {$_.GroupComponent -match "Administrators" -and $_.PartComponent -match $env:username})) {
             Return
         }
-        #If not Windows 10 then exit.
-        if(!(gwmi -class win32_operatingsystem -Property Version | Where {($_.Version -split "\.")[0] -ge 10})){
+        #If not Windows 8.1 or higher then exit.
+        $OSV = (gwmi -class win32_operatingsystem -Property Version).Version -split "\."
+        if(!(($OSV[0] -ge 10) -or ($OSV[0] -eq 6 -and $OSV[1] -eq 3))){
             Return
         }
 
